@@ -394,6 +394,16 @@ class Cursor:
         else:
             raise Error(_NO_ARROW_SUPPORT_MSG)
 
+    def nextset():
+        """
+        makes cursor skip to the next available result set, discarding any remaining rows from the
+        current result set. If there are no more result sets, the method returns False.
+        Otherwise, it returns a True and subsequent calls to the fetch methods will
+        return rows from the next result set.
+        """
+        self._assert_valid_result_set()
+        pass
+
     def close(self):
         """
         Close the cursor.
