@@ -19,6 +19,9 @@ def test_callproc_unsupported(dsn, configuration):
 @for_one_database
 def test_nextset_unsupported(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-
-    with pytest.raises(AttributeError):
+    try:
         cursor.nextset()
+    except Exception as exc:
+        assert False, "Didn't find a call for nextset"
+    else:
+        assert True, "Found call for nextset"

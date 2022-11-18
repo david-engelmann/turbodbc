@@ -81,6 +81,11 @@ std::shared_ptr<turbodbc::command> cursor::get_command()
     return command_;
 }
 
+void cursor::nextset()
+{
+
+}
+
 void cursor::reset()
 {
     results_.reset();
