@@ -394,7 +394,7 @@ class Cursor:
         else:
             raise Error(_NO_ARROW_SUPPORT_MSG)
 
-    def nextset():
+    def nextset(self) -> bool:
         """
         makes cursor skip to the next available result set, discarding any remaining rows from the
         current result set. If there are no more result sets, the method returns False.
@@ -402,7 +402,7 @@ class Cursor:
         return rows from the next result set.
         """
         self._assert_valid_result_set()
-        pass
+        return self.impl.more_results()
 
     def close(self):
         """

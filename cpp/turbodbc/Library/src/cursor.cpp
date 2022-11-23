@@ -66,6 +66,11 @@ std::shared_ptr<result_sets::result_set> cursor::get_result_set() const
     return command_->get_results();
 }
 
+bool cursor::more_results() const
+{
+    return command_->more_results();
+}
+
 int64_t cursor::get_row_count()
 {
     return command_->get_row_count();
@@ -79,11 +84,6 @@ std::shared_ptr<cpp_odbc::connection const> cursor::get_connection() const
 std::shared_ptr<turbodbc::command> cursor::get_command()
 {
     return command_;
-}
-
-void cursor::nextset()
-{
-
 }
 
 void cursor::reset()

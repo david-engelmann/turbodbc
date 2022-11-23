@@ -1,6 +1,5 @@
 import pytest
 from helpers import for_one_database, get_credentials
-
 from turbodbc import connect
 
 """
@@ -14,14 +13,3 @@ def test_callproc_unsupported(dsn, configuration):
 
     with pytest.raises(AttributeError):
         cursor.callproc()
-
-
-@for_one_database
-def test_nextset_unsupported(dsn, configuration):
-    cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    try:
-        cursor.nextset()
-    except Exception as exc:
-        assert False, "Didn't find a call for nextset"
-    else:
-        assert True, "Found call for nextset"

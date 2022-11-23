@@ -16,7 +16,7 @@ void for_cursor(pybind11::module & module)
             .def("_reset",  &turbodbc::cursor::reset)
             .def("get_row_count", &turbodbc::cursor::get_row_count)
             .def("get_result_set", &turbodbc::cursor::get_result_set)
-            .def("nextset", &turbodbc::cursor::nextset)
+            .def("more_results", &turbodbc::cursor::more_results)
         ;
 }
 

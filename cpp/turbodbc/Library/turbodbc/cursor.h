@@ -30,7 +30,7 @@ public:
 
     int64_t get_row_count();
 
-    void nextset();
+    bool more_results() const;
 
     std::shared_ptr <result_sets::result_set> get_result_set() const;
 

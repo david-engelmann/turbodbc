@@ -56,7 +56,8 @@ def _get_configuration(file_name):
 
 
 def _get_configurations():
-    return [_get_configuration(file_name) for file_name in _get_config_files()]
+    return [_get_configuration(file_name) for file_name in _get_config_files()
+            if "nextset" not in file_name]
 
 
 """
@@ -111,6 +112,21 @@ for_one_database = pytest.mark.parametrize(
     "dsn,configuration", [_get_configuration(_get_config_files()[0])]
 )
 
+"""
+Use this decorator to execute a test function once for a single result set configuration.
+
+Please note the test function *must* take the parameters `dsn` and `configuration`,
+and in that order.
+
+Example:
+
+@for_one_result_set
+def test_important_stuff(dsn, configuration):
+    assert 1 == 2
+"""
+for_one_result_set = pytest.mark.parametrize(
+    "dsn,configuration", [_get_configuration(_get_config_files()[-1])]
+)
 
 @contextmanager
 def open_connection(
