@@ -12,7 +12,6 @@ def test_nextset_supported(dsn, configuration):
 @for_one_result_set
 def test_nextset_with_one_result_set(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    print(f"options:\n{configuration}\ncursor:\n{dir(cursor)}\n")
     cursor.execute("SELECT 42")
     try:
         cursor.nextset()
