@@ -87,3 +87,17 @@ def test_nextset_with_postgres_procedure(dsn, configuration):
         assert False, f"Didn't find a call for nextset\n{exc}\n"
     else:
         assert True, "Found call for nextset"
+
+@for_one_database
+def test_nextset_with_one_result_set(dsn, configuration):
+    cursor = connect(dsn, **get_credentials(configuration)).cursor()
+    cursor.execute("SELECT 4;SELECT 2;")
+    try:
+        assert cursor.fetchall() == [[4]]
+        next_set_present = cursor.nextset()
+        if next_set_present:
+            assert cursor.fetchall() == [[2]]
+    except Exception as exc:
+        assert False, f"Didn't find a call for nextset\n{exc}\n"
+    else:
+        assert True, "Found call for nextset"
