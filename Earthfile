@@ -83,7 +83,7 @@ build:
     WORKDIR /src/build
 
     ENV ODBCSYSINI=/src/earthly/odbc
-    ENV TURBODBC_TEST_CONFIGURATION_FILES="query_fixtures_postgresql.json,query_fixtures_mssql.json,query_fixtures_mysql.json,query_fixtures_nextset.json"
+    ENV TURBODBC_TEST_CONFIGURATION_FILES="query_fixtures_postgresql.json,query_fixtures_mssql.json,query_fixtures_mysql.json"
     RUN ln -s /opt/pybind11-2.9.1 /src/pybind11
 
     RUN bash -ic " \
