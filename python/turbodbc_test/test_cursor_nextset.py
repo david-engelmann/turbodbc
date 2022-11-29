@@ -114,19 +114,18 @@ def test_nextset_with_two_select_statements(dsn, configuration):
     else:
         assert True, "Found call for nextset"
 
-@for_each_database_except(["PostgreSQL"])
+@for_each_database_except(["PostgreSQL", "MSSQL"])
 def test_nextset_with_two_result_set(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
-    BEGIN
-    SET NOCOUNT ON;
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC_TWO_INTS () 
+    BEGIN 
     SELECT 4;
     SELECT 2;
     END;
     """
     cursor.execute(multi_result_set_stored_proc)
-    cursor.execute("EXEC TEST_PROC;")
+    cursor.execute("EXEC TEST_PROC_TWO_INTS;")
     try:
         assert cursor.fetchall() == [[4]]
         next_set_present = cursor.nextset()
@@ -137,19 +136,18 @@ def test_nextset_with_two_result_set(dsn, configuration):
     else:
         assert True, "Found call for nextset"
 
-@for_each_database_except(["PostgreSQL"])
+@for_each_database_except(["PostgreSQL", "MSSQL"])
 def test_nextset_with_two_result_set_with_alias(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
-    BEGIN
-    SET NOCOUNT ON;
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC_TWO_ALIAS_INTS () 
+    BEGIN 
     SELECT 4 as Four;
     SELECT 2 as Two;
     END;
     """
     cursor.execute(multi_result_set_stored_proc)
-    cursor.execute("EXEC TEST_PROC;")
+    cursor.execute("EXEC TEST_PROC_TWO_ALIAS_INTS;")
     try:
         assert cursor.fetchall() == [[4]]
         next_set_present = cursor.nextset()
@@ -160,20 +158,19 @@ def test_nextset_with_two_result_set_with_alias(dsn, configuration):
     else:
         assert True, "Found call for nextset"
 
-@for_each_database_except(["PostgreSQL"])
+@for_each_database_except(["PostgreSQL", "MSSQL"])
 def test_nextset_with_three_result_set(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
-    BEGIN
-    SET NOCOUNT ON;
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC_THREE_INTS () 
+    BEGIN 
     SELECT 4;
     SELECT 3;
     SELECT 2;
     END;
     """
     cursor.execute(multi_result_set_stored_proc)
-    cursor.execute("EXEC TEST_PROC;")
+    cursor.execute("EXEC TEST_PROC_THREE_INTS;")
     try:
         assert cursor.fetchall() == [[4]]
         next_set_present = cursor.nextset()
