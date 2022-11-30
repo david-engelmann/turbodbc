@@ -130,7 +130,7 @@ def test_nextset_with_two_result_set(dsn, configuration):
     END
     """
     cursor.execute(multi_result_set_stored_proc)
-    cursor.execute("EXEC TEST_PROC_TWO_INTS;")
+    cursor.execute("CALL TEST_PROC_TWO_INTS();")
     try:
         assert cursor.fetchall() == [[4]]
         next_set_present = cursor.nextset()
@@ -157,7 +157,7 @@ def test_nextset_with_two_result_set_with_alias(dsn, configuration):
     END
     """
     cursor.execute(multi_result_set_stored_proc)
-    cursor.execute("EXEC TEST_PROC_TWO_ALIAS_INTS;")
+    cursor.execute("CALL TEST_PROC_TWO_ALIAS_INTS();")
     try:
         assert cursor.fetchall() == [[4]]
         next_set_present = cursor.nextset()
@@ -186,7 +186,7 @@ def test_nextset_with_three_result_set(dsn, configuration):
     END
     """
     cursor.execute(multi_result_set_stored_proc)
-    cursor.execute("EXEC TEST_PROC_THREE_INTS;")
+    cursor.execute("CALL TEST_PROC_THREE_INTS();")
     try:
         assert cursor.fetchall() == [[4]]
         next_set_present = cursor.nextset()
