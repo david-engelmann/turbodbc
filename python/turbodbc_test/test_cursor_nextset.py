@@ -118,11 +118,16 @@ def test_nextset_with_two_select_statements(dsn, configuration):
 def test_nextset_with_two_result_set(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC_TWO_INTS () 
-    BEGIN 
-    SELECT 4;
-    SELECT 2;
-    END;
+    multi_result_set_stored_proc = """
+    CREATE PROCEDURE TEST_PROC_TWO_INTS(
+        OUT result_one int,
+        OUT result_two int)
+    BEGIN
+
+        SELECT 4;
+        SELECT 2;
+
+    END
     """
     cursor.execute(multi_result_set_stored_proc)
     cursor.execute("EXEC TEST_PROC_TWO_INTS;")
@@ -140,11 +145,16 @@ def test_nextset_with_two_result_set(dsn, configuration):
 def test_nextset_with_two_result_set_with_alias(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC_TWO_ALIAS_INTS () 
-    BEGIN 
-    SELECT 4 as Four;
-    SELECT 2 as Two;
-    END;
+    multi_result_set_stored_proc = """
+    CREATE PROCEDURE TEST_PROC_TWO_ALIAS_INTS(
+        OUT Four int,
+        OUT Two int)
+    BEGIN
+
+        SELECT 4 as Four;
+        SELECT 2 as Two;
+
+    END
     """
     cursor.execute(multi_result_set_stored_proc)
     cursor.execute("EXEC TEST_PROC_TWO_ALIAS_INTS;")
@@ -162,12 +172,18 @@ def test_nextset_with_two_result_set_with_alias(dsn, configuration):
 def test_nextset_with_three_result_set(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC_THREE_INTS () 
-    BEGIN 
-    SELECT 4;
-    SELECT 3;
-    SELECT 2;
-    END;
+    multi_result_set_stored_proc = """
+    CREATE PROCEDURE TEST_PROC_THREE_INTS(
+        OUT result_one int,
+        OUT result_two int,
+        OUT result_three in)
+    BEGIN
+
+        SELECT 4;
+        SELECT 3;
+        SELECT 2;
+
+    END
     """
     cursor.execute(multi_result_set_stored_proc)
     cursor.execute("EXEC TEST_PROC_THREE_INTS;")
