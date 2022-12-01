@@ -119,9 +119,7 @@ def test_nextset_with_two_result_set(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
     multi_result_set_stored_proc = """
-    CREATE PROCEDURE TEST_PROC_TWO_INTS(
-        OUT result_one int,
-        OUT result_two int)
+    CREATE PROCEDURE TEST_PROC_TWO_INTS()
     BEGIN
 
         SELECT 4;
@@ -146,9 +144,7 @@ def test_nextset_with_two_result_set_with_alias(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
     multi_result_set_stored_proc = """
-    CREATE PROCEDURE TEST_PROC_TWO_ALIAS_INTS(
-        OUT Four int,
-        OUT Two int)
+    CREATE PROCEDURE TEST_PROC_TWO_ALIAS_INTS()
     BEGIN
 
         SELECT 4 as Four;
@@ -173,10 +169,7 @@ def test_nextset_with_three_result_set(dsn, configuration):
     print(f"dsn: {dsn}\n")
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
     multi_result_set_stored_proc = """
-    CREATE PROCEDURE TEST_PROC_THREE_INTS(
-        OUT result_one int,
-        OUT result_two int,
-        OUT result_three in)
+    CREATE PROCEDURE TEST_PROC_THREE_INTS()
     BEGIN
 
         SELECT 4;
@@ -200,3 +193,72 @@ def test_nextset_with_three_result_set(dsn, configuration):
     else:
         assert True, "Found call for nextset"
 
+@for_each_database_except(["PostgreSQL", "MySQL"])
+def test_nextset_with_two_result_set(dsn, configuration):
+    print(f"dsn: {dsn}\n")
+    cursor = connect(dsn, **get_credentials(configuration)).cursor()
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
+    AS 
+    SET NOCOUNT ON 
+    SELECT 4 
+    SELECT 2 
+    """
+    cursor.execute(multi_result_set_stored_proc)
+    cursor.execute("EXEC TEST_PROC;")
+    try:
+        assert cursor.fetchall() == [[4]]
+        next_set_present = cursor.nextset()
+        if next_set_present:
+            assert cursor.fetchall() == [[2]]
+    except Exception as exc:
+        assert False, f"Didn't find a call for nextset\n{exc}\n"
+    else:
+        assert True, "Found call for nextset"
+
+@for_each_database_except(["PostgreSQL", "MySQL"])
+def test_nextset_with_two_result_set_with_alias(dsn, configuration):
+    print(f"dsn: {dsn}\n")
+    cursor = connect(dsn, **get_credentials(configuration)).cursor()
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
+    AS 
+    SET NOCOUNT ON 
+    SELECT 4 as Four 
+    SELECT 2 as Two
+    """
+    cursor.execute(multi_result_set_stored_proc)
+    cursor.execute("EXEC TEST_PROC;")
+    try:
+        assert cursor.fetchall() == [[4]]
+        next_set_present = cursor.nextset()
+        if next_set_present:
+            assert cursor.fetchall() == [[2]]
+    except Exception as exc:
+        assert False, f"Didn't find a call for nextset\n{exc}\n"
+    else:
+        assert True, "Found call for nextset"
+
+@for_each_database_except(["PostgreSQL", "MySQL"])
+def test_nextset_with_three_result_set(dsn, configuration):
+    print(f"dsn: {dsn}\n")
+    cursor = connect(dsn, **get_credentials(configuration)).cursor()
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
+    AS 
+    SET NOCOUNT ON 
+    SELECT 4 
+    SELECT 3 
+    SELECT 2
+    """
+    cursor.execute(multi_result_set_stored_proc)
+    cursor.execute("EXEC TEST_PROC;")
+    try:
+        assert cursor.fetchall() == [[4]]
+        next_set_present = cursor.nextset()
+        if next_set_present:
+            assert cursor.fetchall() == [[3]]
+            next_set_present = cursor.nextset()
+            if next_set_present:
+                assert cursor.fetchall() == [[2]]
+    except Exception as exc:
+        assert False, f"Didn't find a call for nextset\n{exc}\n"
+    else:
+        assert True, "Found call for nextset"
