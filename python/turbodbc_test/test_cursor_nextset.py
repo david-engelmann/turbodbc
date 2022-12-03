@@ -1,5 +1,5 @@
-import pytest
 from helpers import for_each_database_except, for_one_database, get_credentials
+
 from turbodbc import connect
 
 
@@ -25,11 +25,11 @@ def test_nextset_with_one_result_set(dsn, configuration):
 def test_nextset_with_function(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
     multi_result_set_func = """CREATE FUNCTION TEST_FUNC ()
-    RETURNS SETOF int AS 
+    RETURNS SETOF int AS
     $func$
     BEGIN
-    RETURN QUERY SELECT 4; 
-    RETURN QUERY SELECT 2; 
+    RETURN QUERY SELECT 4;
+    RETURN QUERY SELECT 2;
     END
     $func$ LANGUAGE plpgsql;
     """
@@ -47,7 +47,7 @@ def test_nextset_with_function(dsn, configuration):
 def test_nextset_with_postgres_procedure(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
     multi_result_set_func = """CREATE PROCEDURE TEST_PROC(INOUT _result_one
-    REFCURSOR = 'result_one', INOUT _result_two REFCURSOR = 'result_two') 
+    REFCURSOR = 'result_one', INOUT _result_two REFCURSOR = 'result_two')
     LANGUAGE 'plpgsql'
     AS $BODY$ BEGIN
         OPEN _result_one FOR SELECT 4;
@@ -201,11 +201,11 @@ def test_nextset_with_three_result_set_mysql(dsn, configuration):
 @for_each_database_except(["PostgreSQL", "MySQL"])
 def test_nextset_with_two_result_set_mssql(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
-    AS 
-    SET NOCOUNT ON 
-    SELECT 4 
-    SELECT 2 
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC
+    AS
+    SET NOCOUNT ON
+    SELECT 4
+    SELECT 2
     """
     cursor.execute(multi_result_set_stored_proc)
     cursor.execute("EXEC TEST_PROC;")
@@ -223,10 +223,10 @@ def test_nextset_with_two_result_set_mssql(dsn, configuration):
 @for_each_database_except(["PostgreSQL", "MySQL"])
 def test_nextset_with_two_result_set_with_alias_mssql(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
-    AS 
-    SET NOCOUNT ON 
-    SELECT 4 as Four 
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC
+    AS
+    SET NOCOUNT ON
+    SELECT 4 as Four
     SELECT 2 as Two
     """
     cursor.execute(multi_result_set_stored_proc)
@@ -245,11 +245,11 @@ def test_nextset_with_two_result_set_with_alias_mssql(dsn, configuration):
 @for_each_database_except(["PostgreSQL", "MySQL"])
 def test_nextset_with_three_result_set_mssql(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC 
-    AS 
-    SET NOCOUNT ON 
-    SELECT 4 
-    SELECT 3 
+    multi_result_set_stored_proc = """CREATE PROCEDURE TEST_PROC
+    AS
+    SET NOCOUNT ON
+    SELECT 4
+    SELECT 3
     SELECT 2
     """
     cursor.execute(multi_result_set_stored_proc)
@@ -266,4 +266,3 @@ def test_nextset_with_three_result_set_mssql(dsn, configuration):
         assert False, f"Didn't find a call for nextset\n{exc}\n"
     else:
         assert True, "Found call for nextset"
-
