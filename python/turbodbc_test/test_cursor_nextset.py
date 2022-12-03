@@ -1,14 +1,12 @@
 import pytest
 from helpers import for_each_database_except, for_one_database, get_credentials
 from turbodbc import connect
-from typing import Callable
 
 
 @for_one_database
 def test_nextset_supported(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
     assert "nextset" in dir(cursor)
-    assert isinstance(cursor.nextset, Callable)
 
 
 @for_one_database
