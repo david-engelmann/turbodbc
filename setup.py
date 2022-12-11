@@ -230,11 +230,11 @@ setup(
     packages=["turbodbc"],
     setup_requires=[
         "pybind11>=2.2.0",
-        "pyarrow>=1,<9.1.0",
+        "pyarrow>=1,<10.0.1",
         "numpy>=1.18",
     ],
     install_requires=[],
-    extras_require={"arrow": ["pyarrow>=1.0,<9.1.0"], "numpy": "numpy>=1.19.0"},
+    extras_require={"arrow": ["pyarrow>=1.0,<10.0.1"], "numpy": "numpy>=1.19.0"},
     python_requires=">=3.8",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
