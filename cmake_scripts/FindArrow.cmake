@@ -106,10 +106,10 @@ if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
     set(ARROW_PYTHON_SHARED_IMP_LIB ${ARROW_LIBS}/${ARROW_PYTHON_LIB_NAME}.lib)
   else()
     set(ARROW_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/libarrow.a)
-    set(ARROW_PYTHON_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/libarrow_python.a)
+    set(ARROW_PYTHON_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/python3.8/site-packages/pyarrow/llibarrow_python.a)
 
     set(ARROW_SHARED_LIB ${ARROW_LIBS}/libarrow${CMAKE_SHARED_LIBRARY_SUFFIX})
-    set(ARROW_PYTHON_SHARED_LIB ${ARROW_LIBS}/libarrow_python${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(ARROW_PYTHON_SHARED_LIB ${ARROW_LIBS}/python3.8/site-packages/pyarrow/libarrow_python${CMAKE_SHARED_LIBRARY_SUFFIX})
   endif()
 endif()
 

@@ -191,6 +191,12 @@ def get_extension_modules():
         pyarrow_location = os.path.dirname(pyarrow.__file__)
         # For now, assume that we build against bundled pyarrow releases.
         pyarrow_include_dir = os.path.join(pyarrow_location, "include")
+        try:
+            pyarrow_include_dir = pyarrow.get_include()
+        except:
+            pyarrow_include_dir = os.path.join(pyarrow_location, "include")
+
+
         turbodbc_arrow_sources = _get_source_files("turbodbc_arrow")
         pyarrow_module_link_args = list(python_module_link_args)
         if sys.platform == "win32":
@@ -199,14 +205,25 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
+
+        try:
+            arrow_libs = pyarrow.get_libraries()
+        except:
+            arrow_libs = ["arrow", "arrow_python"]
+
+        try:
+            arrow_lib_dirs = pyarrow.get_library_dirs() + [pyarrow_location]
+        except:
+            arrow_lib_dirs = [pyarrow_location]
+
         turbodbc_arrow = Extension(
             "turbodbc_arrow_support",
             sources=turbodbc_arrow_sources,
             include_dirs=include_dirs + [pyarrow_include_dir],
             extra_compile_args=extra_compile_args + hidden_visibility_args,
-            libraries=[odbclib, "arrow", "arrow_python"] + turbodbc_libs,
+            libraries=[odbclib] + arrow_libs + turbodbc_libs,
             extra_link_args=pyarrow_module_link_args,
-            library_dirs=library_dirs + [pyarrow_location],
+            library_dirs=library_dirs + arrow_lib_dirs,
         )
         extension_modules.append(turbodbc_arrow)
 
@@ -230,11 +247,11 @@ setup(
     packages=["turbodbc"],
     setup_requires=[
         "pybind11>=2.2.0",
-        "pyarrow>=1,<10.0.1",
+        "pyarrow>=1,<10.0.2",
         "numpy>=1.18",
     ],
     install_requires=[],
-    extras_require={"arrow": ["pyarrow>=1.0,<10.0.1"], "numpy": "numpy>=1.19.0"},
+    extras_require={"arrow": ["pyarrow>=1.0,<10.0.2"], "numpy": "numpy>=1.19.0"},
     python_requires=">=3.8",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
