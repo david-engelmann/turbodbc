@@ -188,14 +188,7 @@ def get_extension_modules():
         # Make default named pyarrow shared libs available.
         pyarrow.create_library_symlinks()
 
-        pyarrow_location = os.path.dirname(pyarrow.__file__)
-        # For now, assume that we build against bundled pyarrow releases.
-        pyarrow_include_dir = os.path.join(pyarrow_location, "include")
-        try:
-            pyarrow_include_dir = pyarrow.get_include()
-        except:
-            pyarrow_include_dir = os.path.join(pyarrow_location, "include")
-
+        pyarrow_include_dir = pyarrow.get_include()
 
         turbodbc_arrow_sources = _get_source_files("turbodbc_arrow")
         pyarrow_module_link_args = list(python_module_link_args)
@@ -206,15 +199,9 @@ def get_extension_modules():
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
 
-        try:
-            arrow_libs = pyarrow.get_libraries()
-        except:
-            arrow_libs = ["arrow", "arrow_python"]
+        arrow_libs = pyarrow.get_libraries()
 
-        try:
-            arrow_lib_dirs = pyarrow.get_library_dirs() + [pyarrow_location]
-        except:
-            arrow_lib_dirs = [pyarrow_location]
+        arrow_lib_dirs = pyarrow.get_library_dirs()
 
         turbodbc_arrow = Extension(
             "turbodbc_arrow_support",
