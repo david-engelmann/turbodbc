@@ -87,9 +87,32 @@ message(STATUS "Found ${ARROW_LIB_PATH} in ${ARROW_SEARCH_LIB_PATH}")
 get_filename_component(ARROW_LIBS ${ARROW_LIB_PATH} DIRECTORY)
 
 find_library(ARROW_PYTHON_LIB_PATH NAMES arrow_python
-  PATHS
-  ${ARROW_SEARCH_LIB_PATH}
+    PATHS
+    ${ARROW_SEARCH_LIB_PATH}/*/site-packages/pyarrow
+    ${ARROW_SEARCH_LIB_PATH}
+  DOC "Path to the libarrow_python headers"
   NO_DEFAULT_PATH)
+
+execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_library_dirs());"
+            RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
+            OUTPUT_VARIABLE _PYARROW_VALUES_OUTPUT
+            ERROR_VARIABLE _PYARROW_ERROR_VALUE
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+if("${_PYARROW_VALUES_OUTPUT}" STREQUAL "_PYARROW_VALUES_OUTPUT-NOTFOUND")
+    message(SEND_ERROR " Could not find precursor libarrow_python header files")
+else()
+    message(STATUS "  Found _PYARROW_VALUES_OUTPUT header files from python at: ${_PYARROW_VALUES_OUTPUT}")
+endif()
+
+# convert to the path needed
+#    string(REGEX REPLACE ";" "\\\\;" _PYARROW_VALUES ${_PYARROW_VALUES_OUTPUT})
+string(REGEX REPLACE "," ";" _PYARROW_VALUES ${_PYARROW_VALUES_OUTPUT})
+string(REGEX REPLACE "\\]" "" _PYARROW_VALUES ${_PYARROW_VALUES})
+string(REGEX REPLACE "\\[" "" _PYARROW_VALUES ${_PYARROW_VALUES})
+
+#string(REGEX REPLACE " " "" _PYARROW_VALUES ${_PYARROW_VALUES})
+list(GET _PYARROW_VALUES 0 ARROW_PYTHON_LIB_PRE_FIX)
 
 if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
   set(ARROW_FOUND TRUE)
@@ -105,11 +128,70 @@ if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
     set(ARROW_SHARED_IMP_LIB ${ARROW_LIBS}/${ARROW_LIB_NAME}.lib)
     set(ARROW_PYTHON_SHARED_IMP_LIB ${ARROW_LIBS}/${ARROW_PYTHON_LIB_NAME}.lib)
   else()
-    set(ARROW_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/libarrow.a)
-    set(ARROW_PYTHON_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/$ENV{PYTHON}/site-packages/pyarrow/llibarrow_python.a)
+    set(ARROW_STATIC_LIB ${ARROW_LIBS}/libarrow.a)
 
+#    find_path(
+#        ARROW_PYTHON_STATIC_LIB_PRE_FIX
+#        arrow_python.a
+#        PATHS
+#            ${ARROW_SEARCH_LIB_PATH}/*/site-packages/pyarrow
+#            ${VIRTUAL_ENV}/lib/*/site-packages/pyarrow
+#            ${CONDA_PREFIX}/lib/*/site-packages/pyarrow
+#             PYTHON_INCLUDE_DIR
+#            ${PYTHON}/lib/site-packages/pyarrow
+#        DOC "Path to the libarrow_python.a headers"
+#    )
+#
+#    if("${ARROW_PYTHON_STATIC_LIB_PRE_FIX}" STREQUAL "ARROW_PYTHON_STATIC_LIB_PRE_FIX-NOTFOUND")
+#        message(SEND_ERROR " Could not find libarrow_python header files")
+#    else()
+#        message(STATUS "  Found header files at: ${ARROW_PYTHON_STATIC_LIB_PRE_FIX}")
+#    endif()
+
+#    execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_library_dirs());"
+#                RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
+#                OUTPUT_VARIABLE _PYARROW_VALUES_OUTPUT
+#                ERROR_VARIABLE _PYARROW_ERROR_VALUE
+#                OUTPUT_STRIP_TRAILING_WHITESPACE)
+#
+#    if("${_PYARROW_VALUES_OUTPUT}" STREQUAL "_PYARROW_VALUES_OUTPUT-NOTFOUND")
+#        message(SEND_ERROR " Could not find precursor libarrow_python header files")
+#    else()
+#        message(STATUS "  Found _PYARROW_VALUES_OUTPUT header files from python at: ${_PYARROW_VALUES_OUTPUT}")
+#    endif()
+#
+#    # convert to the path needed
+##    string(REGEX REPLACE ";" "\\\\;" _PYARROW_VALUES ${_PYARROW_VALUES_OUTPUT})
+#    string(REGEX REPLACE "," ";" _PYARROW_VALUES ${_PYARROW_VALUES_OUTPUT})
+#    string(REGEX REPLACE "\\]" "" _PYARROW_VALUES ${_PYARROW_VALUES})
+#    string(REGEX REPLACE "\\[" "" _PYARROW_VALUES ${_PYARROW_VALUES})
+#
+#    #string(REGEX REPLACE " " "" _PYARROW_VALUES ${_PYARROW_VALUES})
+#    list(GET _PYARROW_VALUES 0 ARROW_PYTHON_STATIC_LIB_PRE_FIX)
+#
+#    if("${ARROW_PYTHON_STATIC_LIB_PRE_FIX}" STREQUAL "ARROW_PYTHON_STATIC_LIB_PRE_FIX-NOTFOUND")
+#        message(SEND_ERROR " Could not find libarrow_python header files")
+#    else()
+#        message(STATUS "  Found prefix header files at: ${ARROW_PYTHON_STATIC_LIB_PRE_FIX}")
+#    endif()
+#
+
+    set(ARROW_PYTHON_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/libarrow_python.a)
     set(ARROW_SHARED_LIB ${ARROW_LIBS}/libarrow${CMAKE_SHARED_LIBRARY_SUFFIX})
-    set(ARROW_PYTHON_SHARED_LIB ${ARROW_LIBS}/$ENV{PYTHON}/site-packages/pyarrow/libarrow_python${CMAKE_SHARED_LIBRARY_SUFFIX})
+
+    #    find_path(
+    #        ARROW_PYTHON_SHARED_LIB
+    #        arrow/libarrow_python$ENV{CMAKE_SHARED_LIBRARY_SUFFIX}
+    #        HINTS
+    #            $ENV{ARROW_LIBS}/*/site-packages/pyarrow
+    #            $ENV{VIRTUAL_ENV}/lib/*/site-packages/pyarrow
+    #            $ENV{CONDA_PREFIX}/lib/*/site-packages/pyarrow
+    #            ENV PYTHON_INCLUDE_DIR
+    #            $ENV{PYTHON}/lib/site-packages/pyarrow
+    #        DOC "Path to the libarrow_python headers"
+    #    )
+
+    set(ARROW_PYTHON_SHARED_LIB ${ARROW_PYTHON_LIB_PATH})
   endif()
 endif()
 
