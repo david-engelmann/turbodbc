@@ -82,7 +82,7 @@ python_module_link_args = []
 base_library_link_args: List[str] = []
 
 if sys.platform == "darwin":
-    extra_compile_args.append("--std=c++11")
+    extra_compile_args.append("--std=c++17")
     extra_compile_args.append("--stdlib=libc++")
     extra_compile_args.append("-mmacosx-version-min=10.9")
     hidden_visibility_args.append("-fvisibility=hidden")
@@ -107,7 +107,7 @@ elif sys.platform == "win32":
         print("warning: BOOST_ROOT enviroment variable not set")
     odbclib = "odbc32"
 else:
-    extra_compile_args.append("--std=c++11")
+    extra_compile_args.append("--std=c++17")
     hidden_visibility_args.append("-fvisibility=hidden")
     python_module_link_args.append("-Wl,-rpath,$ORIGIN")
     if "UNIXODBC_INCLUDE_DIR" in os.environ:
@@ -200,6 +200,7 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
 
         arrow_libs = pyarrow.get_libraries()
+        arrow_libs.sort(key=len, reverse=True)
 
         arrow_lib_dirs = pyarrow.get_library_dirs()
 
