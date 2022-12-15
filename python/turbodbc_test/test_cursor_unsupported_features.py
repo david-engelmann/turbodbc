@@ -14,3 +14,4 @@ def test_callproc_unsupported(dsn, configuration):
 
     with pytest.raises(AttributeError):
         cursor.callproc()
+

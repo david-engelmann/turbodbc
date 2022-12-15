@@ -83,11 +83,13 @@ else()
   set(ARROW_SEARCH_LIB_PATH
     ${ARROW_HOME}/lib
     )
+
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
+
   find_path(ARROW_INCLUDE_DIR arrow/api.h PATHS
     ${ARROW_SEARCH_HEADER_PATHS}
     # make sure we don't accidentally pick up a different version
@@ -95,11 +97,9 @@ else()
     )
 endif()
 
-
 if (MSVC)
   SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
 endif()
-
 
 find_library(ARROW_LIB_PATH NAMES arrow
   PATHS
