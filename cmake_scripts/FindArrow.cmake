@@ -68,16 +68,36 @@ else()
     ${ARROW_HOME}/lib
     )
 
+  execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
+                RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
+                OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
+                ERROR_VARIABLE _PYARROW_ERROR_VALUE
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  if("${PYARROW_INCLUDE_DIR}" STREQUAL "PYARROW_INCLUDE_DIR-NOTFOUND")
+        message(SEND_ERROR " Could not find precursor libarrow_python header files")
+  else()
+        message(STATUS "  Found PYARROW_INCLUDE_DIR header files from python at: ${PYARROW_INCLUDE_DIR}")
+  endif()
+
   find_path(ARROW_INCLUDE_DIR arrow/array.h PATHS
     ${ARROW_SEARCH_HEADER_PATHS}
     # make sure we don't accidentally pick up a different version
     NO_DEFAULT_PATH
     )
+
+  if("${ARROW_INCLUDE_DIR}" STREQUAL "ARROW_INCLUDE_DIR-NOTFOUND")
+        message(SEND_ERROR " Could not find precursor libarrow_python with array.h header files")
+  else()
+        message(STATUS "  Found ARROW_INCLUDE_DIR with array.h header files from python at: ${ARROW_INCLUDE_DIR}")
+  endif()
 endif()
+
 
 if (MSVC)
   SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib" ".dll")
 endif()
+
 
 find_library(ARROW_LIB_PATH NAMES arrow
   PATHS
@@ -126,7 +146,7 @@ if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
     set(ARROW_PYTHON_SHARED_IMP_LIB ${ARROW_LIBS}/${ARROW_PYTHON_LIB_NAME}.lib)
   else()
     set(ARROW_STATIC_LIB ${ARROW_LIBS}/libarrow.a)
-    set(ARROW_PYTHON_STATIC_LIB ${ARROW_PYTHON_LIB_PATH}/libarrow_python.a)
+    set(ARROW_PYTHON_STATIC_LIB ${ARROW_PYTHON_LIB_PRE_FIX}/libarrow_python.a)
     set(ARROW_SHARED_LIB ${ARROW_LIBS}/libarrow${CMAKE_SHARED_LIBRARY_SUFFIX})
     set(ARROW_PYTHON_SHARED_LIB ${ARROW_PYTHON_LIB_PATH})
   endif()
