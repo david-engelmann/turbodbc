@@ -47,38 +47,29 @@ if (NOT ARROW_HOME)
   elseif(DEFINED ENV{VIRTUAL_ENV})
     find_path(ARROW_INCLUDE_DIR arrow/api.h HINTS
       $ENV{VIRTUAL_ENV}/lib/*/site-packages/pyarrow/include)
-
-
     execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(PYARROW_INCLUDE_DIR ${PYARROW_INCLUDE_DIR})
     get_filename_component(ARROW_SEARCH_LIB_PATH ${ARROW_INCLUDE_DIR} DIRECTORY)
   else()
     if (MSVC)
       find_path(ARROW_INCLUDE_DIR arrow/api.h HINTS
         $ENV{PYTHON}/lib/site-packages/pyarrow/include)
-
       execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-      set(PYARROW_INCLUDE_DIR ${PYARROW_INCLUDE_DIR})
-
     else()
       find_path(ARROW_INCLUDE_DIR arrow/api.h HINTS
         /usr/local/lib/*/dist-packages/pyarrow/include)
-
       execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-      set(PYARROW_INCLUDE_DIR ${PYARROW_INCLUDE_DIR})
-
     endif()
     get_filename_component(ARROW_SEARCH_LIB_PATH ${ARROW_INCLUDE_DIR} DIRECTORY)
     set(ARROW_SEARCH_HEADER_PATHS ${ARROW_INCLUDE_DIR})
@@ -92,14 +83,11 @@ else()
   set(ARROW_SEARCH_LIB_PATH
     ${ARROW_HOME}/lib
     )
-
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-  set(PYARROW_INCLUDE_DIR ${PYARROW_INCLUDE_DIR})
-
   find_path(ARROW_INCLUDE_DIR arrow/api.h PATHS
     ${ARROW_SEARCH_HEADER_PATHS}
     # make sure we don't accidentally pick up a different version
@@ -126,24 +114,6 @@ find_library(ARROW_PYTHON_LIB_PATH NAMES arrow_python
     ${ARROW_SEARCH_LIB_PATH}
   DOC "Path to the libarrow_python headers"
   NO_DEFAULT_PATH)
-
-execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_library_dirs());"
-            RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
-            OUTPUT_VARIABLE _PYARROW_VALUES_OUTPUT
-            ERROR_VARIABLE _PYARROW_ERROR_VALUE
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-if("${_PYARROW_VALUES_OUTPUT}" STREQUAL "_PYARROW_VALUES_OUTPUT-NOTFOUND")
-    message(SEND_ERROR " Could not find precursor libarrow_python header files")
-else()
-    message(STATUS "  Found _PYARROW_VALUES_OUTPUT header files from python at: ${_PYARROW_VALUES_OUTPUT}")
-endif()
-
-# convert to the path needed
-string(REGEX REPLACE "," ";" _PYARROW_VALUES ${_PYARROW_VALUES_OUTPUT})
-string(REGEX REPLACE "\\]" "" _PYARROW_VALUES ${_PYARROW_VALUES})
-string(REGEX REPLACE "\\[" "" _PYARROW_VALUES ${_PYARROW_VALUES})
-list(GET _PYARROW_VALUES 0 ARROW_PYTHON_LIB_PRE_FIX)
 
 if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
   set(ARROW_FOUND TRUE)
