@@ -1,7 +1,23 @@
 Version history / changelog
 ===========================
 
-From version 2.0.0, turbodbc adapts semantic versioning.
+* add in support and test for cursor.nextset() when dealing with multiple result sets
+* modified the pyarrow logic in the setup.py to utilize the following helper
+  functions
+    * pyarrow.get_include()
+    * pyarrow.get_libraries()
+    * pyarrow.get_library_dirs()
+* Bump pyarrow support to <11
+    * Requires an additional pyarrow specific include directory add to reflect
+      arrow adjustments
+* Update the Microsoft ODBC Driver 17 for SQL Server version
+* Bump c++11 to c++17 to enable pyarrow10 support
+* Remove static lib logic for FindArrow
+
+Version 4.5.6
+-------------
+
+* From version 2.0.0, turbodbc adapts semantic versioning.
 
 Version 4.5.5
 -------------

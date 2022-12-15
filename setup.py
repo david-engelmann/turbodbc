@@ -200,7 +200,6 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
 
         arrow_libs = pyarrow.get_libraries()
-        arrow_libs.sort(key=len, reverse=True)
 
         arrow_lib_dirs = pyarrow.get_library_dirs()
 
