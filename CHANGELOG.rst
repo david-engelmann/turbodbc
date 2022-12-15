@@ -13,8 +13,7 @@ Version 4.5.6
     * pyarrow.get_libraries()
     * pyarrow.get_library_dirs()
 * Bump pyarrow support to <11
-    * Requires an additional pyarrow specific include directory add to reflect
-      arrow adjustments
+    * Requires an additional pyarrow specific include directory
 * Update the Microsoft ODBC Driver 17 for SQL Server version
 * Bump c++11 to c++17 to enable pyarrow10 support
 * Remove static lib logic for FindArrow
