@@ -41,7 +41,11 @@ if (NOT ARROW_HOME)
     pkg_get_variable(ARROW_SO_VERSION arrow so_version)
     message(STATUS "Arrow SO version: ${ARROW_SO_VERSION}")
     set(ARROW_INCLUDE_DIR ${ARROW_INCLUDE_DIRS})
-    set(PYARROW_INCLUDE_DIR ${PYARROW_INCLUDE_DIR})
+    execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
+                RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
+                OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
+                ERROR_VARIABLE _PYARROW_ERROR_VALUE
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
     set(ARROW_LIBS ${ARROW_LIBRARY_DIRS})
     set(ARROW_SEARCH_LIB_PATH ${ARROW_LIBRARY_DIRS})
   elseif(DEFINED ENV{VIRTUAL_ENV})
@@ -52,7 +56,17 @@ if (NOT ARROW_HOME)
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
-    get_filename_component(ARROW_SEARCH_LIB_PATH ${ARROW_INCLUDE_DIR} DIRECTORY)
+    execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_library_dirs());"
+            RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
+            OUTPUT_VARIABLE _PYARROW_VALUES_OUTPUT
+            ERROR_VARIABLE _PYARROW_ERROR_VALUE
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    # convert to the path needed
+    string(REGEX REPLACE "," ";" _PYARROW_VALUES ${_PYARROW_VALUES_OUTPUT})
+    string(REGEX REPLACE "\\]" "" _PYARROW_VALUES ${_PYARROW_VALUES})
+    string(REGEX REPLACE "\\[" "" _PYARROW_VALUES ${_PYARROW_VALUES})
+    list(GET _PYARROW_VALUES 0 ARROW_SEARCH_LIB_PATH)
   else()
     if (MSVC)
       find_path(ARROW_INCLUDE_DIR arrow/api.h HINTS
