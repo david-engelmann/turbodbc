@@ -49,7 +49,6 @@ python:
         gtest \
         cxx-compiler \
         mock \
-        pkg-config \
         pytest \
         pytest-cov \
         python=${PYTHON_VERSION} \

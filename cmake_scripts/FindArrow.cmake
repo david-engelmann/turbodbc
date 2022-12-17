@@ -49,13 +49,12 @@ if (NOT ARROW_HOME)
     set(ARROW_LIBS ${ARROW_LIBRARY_DIRS})
     set(ARROW_SEARCH_LIB_PATH ${ARROW_LIBRARY_DIRS})
   elseif(DEFINED ENV{VIRTUAL_ENV})
-    find_path(ARROW_INCLUDE_DIR arrow/api.h HINTS
-      $ENV{VIRTUAL_ENV}/lib/*/site-packages/pyarrow/include)
     execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
                 OUTPUT_VARIABLE PYARROW_INCLUDE_DIR
                 ERROR_VARIABLE _PYARROW_ERROR_VALUE
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(ARROW_INCLUDE_DIR ${PYARROW_INCLUDE_DIR})
     execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_library_dirs());"
             RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
             OUTPUT_VARIABLE _PYARROW_VALUES_OUTPUT
