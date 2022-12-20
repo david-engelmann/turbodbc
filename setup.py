@@ -121,6 +121,7 @@ else:
 if sys.version_info.minor < 10:
     extra_compile_args.append("CONDA_DLL_SEARCH_MODIFICATION_ENABLE=1")
 
+
 def get_extension_modules():
     extension_modules = []
 
