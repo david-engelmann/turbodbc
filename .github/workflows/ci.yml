@@ -31,6 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
         target:
           - +test-python3.8-arrow1.x.x
           - +test-python3.8-arrow2.x.x
@@ -64,7 +65,6 @@ jobs:
           - +test-python3.10-arrow10.x.x
         experimental: [ false ]
         upload: [ false ]
-        os: [macos-latest, ubuntu-latest, windows-latest]
         include:
           - target: +test-python3.8-arrow10.x.x
             experimental: false
