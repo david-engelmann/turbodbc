@@ -85,6 +85,8 @@ if sys.platform == "darwin":
     extra_compile_args.append("--std=c++17")
     extra_compile_args.append("--stdlib=libc++")
     extra_compile_args.append("-mmacosx-version-min=11.0")
+    # See https://conda-forge.org/docs/maintainer/knowledge_base.html#newer-c-features-with-old-sdk
+    extra_compile_args.append("-D_LIBCPP_DISABLE_AVAILABILITY")
     hidden_visibility_args.append("-fvisibility=hidden")
     include_dirs.append(os.getenv("UNIXODBC_INCLUDE_DIR", "/usr/local/include/"))
     library_dirs.append(os.getenv("UNIXODBC_LIBRARY_DIR", "/usr/local/lib/"))
