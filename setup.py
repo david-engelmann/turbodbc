@@ -84,7 +84,7 @@ base_library_link_args: List[str] = []
 if sys.platform == "darwin":
     extra_compile_args.append("--std=c++11")
     extra_compile_args.append("--stdlib=libc++")
-    extra_compile_args.append("-mmacosx-version-min=10.9")
+    extra_compile_args.append("-mmacosx-version-min=11.0")
     hidden_visibility_args.append("-fvisibility=hidden")
     include_dirs.append(os.getenv("UNIXODBC_INCLUDE_DIR", "/usr/local/include/"))
     library_dirs.append(os.getenv("UNIXODBC_LIBRARY_DIR", "/usr/local/lib/"))
@@ -116,6 +116,8 @@ else:
         library_dirs.append(os.getenv("UNIXODBC_LIBRARY_DIR"))
     odbclib = "odbc"
 
+if sys.version_info.minor < 10:
+    extra_compile_args.append("CONDA_DLL_SEARCH_MODIFICATION_ENABLE=1")
 
 def get_extension_modules():
     extension_modules = []
