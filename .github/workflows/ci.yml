@@ -69,22 +69,28 @@ jobs:
           - target: +test-python3.8-arrow10.x.x
             experimental: false
             upload: true
+            os: ubuntu-latest
           - target: +test-python3.9-arrow10.x.x
             experimental: false
             upload: true
+            os: ubuntu-latest
           - target: +test-python3.10-arrow10.x.x
             experimental: false
             upload: true
+            os: ubuntu-latest
           - target: +test-python3.8-arrow-nightly
             experimental: true
             upload: false
+            os: ubuntu-latest
           - target: +test-python3.9-arrow-nightly
             experimental: true
             upload: false
+            os: ubuntu-latest
           - target: +test-python3.10-arrow-nightly
             experimental: true
             upload: false
-    runs-on: ubuntu-latest
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Download earthly 0.5.0
