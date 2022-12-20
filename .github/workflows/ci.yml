@@ -28,7 +28,6 @@ jobs:
   tests:
     env:
       FORCE_COLOR: 1
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
@@ -85,9 +84,7 @@ jobs:
           - target: +test-python3.10-arrow-nightly
             experimental: true
             upload: false
-          - os: macos-latest
-          - os: ubuntu-latest
-          - os: windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Download earthly 0.5.0
