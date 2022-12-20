@@ -84,6 +84,7 @@ jobs:
           - target: +test-python3.10-arrow-nightly
             experimental: true
             upload: false
+         - os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
