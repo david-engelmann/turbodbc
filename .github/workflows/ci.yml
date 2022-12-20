@@ -95,11 +95,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: Download earthly 0.5.0
         run: |
-             if [ "$RUNNER_OS" != "Windows" ]; then
-                sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.0/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'
-             else
+             if [ "$RUNNER_OS" == "Windows" ]; then
                 echo 'windows os found'
                 exit 1
+             elif [ "RUNNER_OS" == "Linux" ]; then
+                sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.0/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'
+             else
+                brew install earthly/earthly/earthly && earthly bootstrap
              fi
       - name: Run build
         run: earthly --allow-privileged ${{ matrix.target }}
