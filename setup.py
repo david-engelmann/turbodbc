@@ -82,7 +82,7 @@ python_module_link_args = []
 base_library_link_args: List[str] = []
 
 if sys.platform == "darwin":
-    extra_compile_args.append("--std=c++11")
+    extra_compile_args.append("--std=c++17")
     extra_compile_args.append("--stdlib=libc++")
     extra_compile_args.append("-mmacosx-version-min=11.0")
     hidden_visibility_args.append("-fvisibility=hidden")
@@ -107,7 +107,7 @@ elif sys.platform == "win32":
         print("warning: BOOST_ROOT enviroment variable not set")
     odbclib = "odbc32"
 else:
-    extra_compile_args.append("--std=c++11")
+    extra_compile_args.append("--std=c++17")
     hidden_visibility_args.append("-fvisibility=hidden")
     python_module_link_args.append("-Wl,-rpath,$ORIGIN")
     if "UNIXODBC_INCLUDE_DIR" in os.environ:
@@ -190,9 +190,8 @@ def get_extension_modules():
         # Make default named pyarrow shared libs available.
         pyarrow.create_library_symlinks()
 
-        pyarrow_location = os.path.dirname(pyarrow.__file__)
-        # For now, assume that we build against bundled pyarrow releases.
-        pyarrow_include_dir = os.path.join(pyarrow_location, "include")
+        pyarrow_include_dir = pyarrow.get_include()
+
         turbodbc_arrow_sources = _get_source_files("turbodbc_arrow")
         pyarrow_module_link_args = list(python_module_link_args)
         if sys.platform == "win32":
@@ -201,14 +200,19 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
+
+        arrow_libs = pyarrow.get_libraries()
+
+        arrow_lib_dirs = pyarrow.get_library_dirs()
+
         turbodbc_arrow = Extension(
             "turbodbc_arrow_support",
             sources=turbodbc_arrow_sources,
             include_dirs=include_dirs + [pyarrow_include_dir],
             extra_compile_args=extra_compile_args + hidden_visibility_args,
-            libraries=[odbclib, "arrow", "arrow_python"] + turbodbc_libs,
+            libraries=[odbclib] + arrow_libs + turbodbc_libs,
             extra_link_args=pyarrow_module_link_args,
-            library_dirs=library_dirs + [pyarrow_location],
+            library_dirs=library_dirs + arrow_lib_dirs,
         )
         extension_modules.append(turbodbc_arrow)
 
@@ -221,7 +225,7 @@ with open(os.path.join(here, "README.md")) as f:
 
 setup(
     name="turbodbc",
-    version="4.5.5",
+    version="4.5.6",
     description="turbodbc is a Python DB API 2.0 compatible ODBC driver",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -232,11 +236,11 @@ setup(
     packages=["turbodbc"],
     setup_requires=[
         "pybind11>=2.2.0",
-        "pyarrow>=1,<9.1.0",
+        "pyarrow>=1,<11",
         "numpy>=1.18",
     ],
     install_requires=[],
-    extras_require={"arrow": ["pyarrow>=1.0,<9.1.0"], "numpy": "numpy>=1.19.0"},
+    extras_require={"arrow": ["pyarrow>=1.0,<11"], "numpy": "numpy>=1.19.0"},
     python_requires=">=3.8",
     classifiers=[
         "Development Status :: 5 - Production/Stable",

@@ -545,3 +545,19 @@ tables as query parameters with ``executemanycolumns()``:
 +------------------------------------------------------------------------------+--------------------------------+
 | ``STRING``                                                                   | ``VARCHAR`` (automatic sizing) |
 +------------------------------------------------------------------------------+--------------------------------+
+
+Using multiple results sets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Some commands will return multi result sets, you can cycle through them with the
+`nextset` function. It will discard the current result set and load up the next
+result set, if another was loaded it return True. If no additional set is found
+it returns False:
+::
+
+    >>> cursor.execute("SELECT 4;SELECT 2;")
+    >>> first_set = cursor.fetchall()
+    >>> while(cursor.nextset()):
+    ...     remaining_set = cursor.fetchall();
+    >>> assert first_set = [[4]]
+    >>> assert remaining_set = [[2]]
+::

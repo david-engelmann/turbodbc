@@ -14,11 +14,3 @@ def test_callproc_unsupported(dsn, configuration):
 
     with pytest.raises(AttributeError):
         cursor.callproc()
-
-
-@for_one_database
-def test_nextset_unsupported(dsn, configuration):
-    cursor = connect(dsn, **get_credentials(configuration)).cursor()
-
-    with pytest.raises(AttributeError):
-        cursor.nextset()
