@@ -98,7 +98,7 @@ jobs:
              if [ "$RUNNER_OS" == "Windows" ]; then
                 echo 'windows os found'
                 exit 1
-             elif [ "RUNNER_OS" == "Linux" ]; then
+             elif [ "$RUNNER_OS" == "Linux" ]; then
                 sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.0/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'
              else
                 brew update
