@@ -103,6 +103,7 @@ jobs:
              else
                 brew update
                 brew cleanup
+                brew doctor
                 sudo chown -R $(whoami) $(brew --prefix)/*
                 brew install earthly/earthly/earthly && earthly bootstrap
              fi
