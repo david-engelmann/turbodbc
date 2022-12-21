@@ -102,10 +102,10 @@ jobs:
                 sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.5.0/earthly-linux-amd64 -O /usr/local/bin/earthly && chmod +x /usr/local/bin/earthly'
              else
                 brew update
-                brew cleanup
-                brew doctor
                 rm /usr/local/bin/go
                 rm /usr/local/bin/gofmt
+                brew cleanup
+                brew doctor
                 sudo chown -R $(whoami) $(brew --prefix)/*
                 brew install earthly/earthly/earthly && earthly bootstrap
              fi
