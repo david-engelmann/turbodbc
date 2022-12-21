@@ -104,7 +104,7 @@ jobs:
                 brew update
                 brew cleanup
                 brew doctor
-                rm /usr/local/bin/2to3
+                rm /usr/local/bin/go
                 sudo chown -R $(whoami) $(brew --prefix)/*
                 brew install earthly/earthly/earthly && earthly bootstrap
              fi
