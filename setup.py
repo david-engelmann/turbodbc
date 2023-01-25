@@ -205,6 +205,7 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
+            extra_compile_args.append("-D_GLIBCXX_USE_CXX11_ABI=0")
 
         arrow_libs = pyarrow.get_libraries()
 
