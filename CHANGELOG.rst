@@ -3,6 +3,11 @@ Version history / changelog
 
 From version 2.0.0, turbodbc adapts semantic versioning.
 
+Version 4.5.7
+-------------
+
+* Set ``_LIBCPP_DISABLE_AVAILABILITY`` to allow building with C++17 on macOS.
+
 Version 4.5.6
 -------------
 
