@@ -2,6 +2,7 @@ import distutils.sysconfig
 import itertools
 import os
 import os.path
+import subprocess
 import sys
 from glob import iglob
 from typing import List
@@ -124,6 +125,12 @@ else:
     odbclib = "odbc"
 
 
+def is_cxx11_abi():
+    cxx11_abi = subprocess.getoutput("echo '#include <string>' | g++ -x c++ -E -dM - | fgrep _GLIBCXX_USE_CXX11_ABI | \
+                                     cut -d ' ' -f2,3")
+    return cxx11_abi == '_GLIBCXX_USE_CXX11_ABI 1'
+
+
 def get_extension_modules():
     extension_modules = []
 
@@ -205,7 +212,8 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
-            extra_compile_args.append("-D_GLIBCXX_USE_CXX11_ABI=0")
+            if not os.environ.get('CONDA_BUILD') and is_cxx11_abi():
+                extra_compile_args.append("-D_GLIBCXX_USE_CXX11_ABI=0")
 
         arrow_libs = pyarrow.get_libraries()
 
