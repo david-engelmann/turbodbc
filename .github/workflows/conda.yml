@@ -6,6 +6,16 @@ on:
   schedule:
     - cron: '47 6 * * *'
 
+
+# Automatically stop old builds on the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -el {0}
+
 jobs:
   tests:
     runs-on: macos-latest
