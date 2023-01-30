@@ -4,6 +4,9 @@ channels:
 dependencies:
   - python>=3.8
   - pyarrow>=1.0,<11
+  - unixodbc
+  - c-compiler
+  - cxx-compiler
   - boost
   - cmake
   - ninja
