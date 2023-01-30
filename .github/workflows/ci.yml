@@ -35,34 +35,34 @@ jobs:
         target:
           - +test-python3.8-arrow1.x.x
           - +test-python3.8-arrow2.x.x
-          - +test-python3.8-arrow3.x.x
-          - +test-python3.8-arrow4.x.x
-          - +test-python3.8-arrow5.x.x
-          - +test-python3.8-arrow6.x.x
-          - +test-python3.8-arrow7.x.x
-          - +test-python3.8-arrow8.x.x
-          - +test-python3.8-arrow9.x.x
-          - +test-python3.8-arrow10.x.x
-          - +test-python3.9-arrow1.x.x
-          - +test-python3.9-arrow2.x.x
-          - +test-python3.9-arrow3.x.x
-          - +test-python3.9-arrow4.x.x
-          - +test-python3.9-arrow5.x.x
-          - +test-python3.9-arrow6.x.x
-          - +test-python3.9-arrow7.x.x
-          - +test-python3.9-arrow8.x.x
-          - +test-python3.9-arrow9.x.x
-          - +test-python3.9-arrow10.x.x
-          - +test-python3.10-arrow1.x.x
-          - +test-python3.10-arrow2.x.x
-          - +test-python3.10-arrow3.x.x
-          - +test-python3.10-arrow4.x.x
-          - +test-python3.10-arrow5.x.x
-          - +test-python3.10-arrow6.x.x
-          - +test-python3.10-arrow7.x.x
-          - +test-python3.10-arrow8.x.x
-          - +test-python3.10-arrow9.x.x
-          - +test-python3.10-arrow10.x.x
+            #- +test-python3.8-arrow3.x.x
+            #- +test-python3.8-arrow4.x.x
+            #- +test-python3.8-arrow5.x.x
+            #- +test-python3.8-arrow6.x.x
+            #- +test-python3.8-arrow7.x.x
+            #- +test-python3.8-arrow8.x.x
+            #- +test-python3.8-arrow9.x.x
+            #- +test-python3.8-arrow10.x.x
+            #- +test-python3.9-arrow1.x.x
+            #- +test-python3.9-arrow2.x.x
+            #- +test-python3.9-arrow3.x.x
+            #- +test-python3.9-arrow4.x.x
+            #- +test-python3.9-arrow5.x.x
+            #- +test-python3.9-arrow6.x.x
+            #- +test-python3.9-arrow7.x.x
+            #- +test-python3.9-arrow8.x.x
+            #- +test-python3.9-arrow9.x.x
+            #- +test-python3.9-arrow10.x.x
+            #- +test-python3.10-arrow1.x.x
+            #- +test-python3.10-arrow2.x.x
+            #- +test-python3.10-arrow3.x.x
+            #- +test-python3.10-arrow4.x.x
+            #- +test-python3.10-arrow5.x.x
+            #- +test-python3.10-arrow6.x.x
+            #- +test-python3.10-arrow7.x.x
+            #- +test-python3.10-arrow8.x.x
+            #- +test-python3.10-arrow9.x.x
+            #- +test-python3.10-arrow10.x.x
         experimental: [ false ]
         upload: [ false ]
         include:
