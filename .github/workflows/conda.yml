@@ -23,7 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
-        PYARROW_VERSION: ['9.0.0', '10.0.1']
+        PYARROW_VERSION: ['10.0.1']
+        include:
+          - PYTHON_VERSION: "3.10"
+            PYARROW_VERSION: "9.0.0"
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
