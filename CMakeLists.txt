@@ -11,7 +11,7 @@ include(default_build_setup)
 # versions, rely on the CMake built-in.
 set(Boost_NO_BOOST_CMAKE ON)
 
-add_subdirectory(pybind11)
+find_package(pybind11 CONFIG)
 find_package(GTest)
 if (GTest_FOUND OR GTEST_FOUND)
   include_directories(${GTEST_INCLUDE_DIR})
