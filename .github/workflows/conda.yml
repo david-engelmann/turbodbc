@@ -52,4 +52,7 @@ jobs:
           ninja && \
           cmake --build . --target install
       - name: Install repository
-        run: cd dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
+        run: |
+          ls -l
+          pwd
+          cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
