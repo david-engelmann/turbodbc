@@ -22,8 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ["3.10"]
-        # PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
+        PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
         PYARROW_VERSION: ['9.0.0', '10.0.1']
     steps:
       - name: Checkout branch
@@ -53,6 +52,7 @@ jobs:
           cmake --build . --target install
       - name: Install repository
         run: |
-          ls -l
-          pwd
           cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
+      - name: Test import
+        run: |
+          cd / && python -c 'import turbodbc'
