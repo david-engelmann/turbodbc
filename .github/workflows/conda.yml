@@ -89,7 +89,7 @@ jobs:
         run: |
           mkdir build && \
           cd build && \
-          cmake -DBOOST_ROOT=${CONDA_PREFIX} -DBUILD_COVERAGE=ON \
+          cmake -DBUILD_COVERAGE=ON \
             -DCMAKE_INSTALL_PREFIX=./dist  \
             -DPYTHON_EXECUTABLE=$(which python) \
             -GNinja .. && \
