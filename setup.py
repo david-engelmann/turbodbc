@@ -1,4 +1,5 @@
 import distutils.sysconfig
+import distutils.ccompiler
 import itertools
 import os
 import os.path
@@ -125,10 +126,16 @@ else:
     odbclib = "odbc"
 
 
+def _get_cxx_compiler():
+    cc = distutils.ccompiler.new_compiler()
+    distutils.sysconfig.customize_compiler(cc)
+    return cc.compiler_cxx[0]
+
+
 def is_cxx11_abi():
-    cxx11_abi = subprocess.getoutput("echo '#include <string>' | g++ -x c++ -E -dM - | fgrep _GLIBCXX_USE_CXX11_ABI | \
-                                     cut -d ' ' -f2,3")
-    return cxx11_abi == '_GLIBCXX_USE_CXX11_ABI 1'
+    shcmd = f"echo '#include <string>' | {_get_cxx_compiler()} -x c++ -E -dM - | fgrep _GLIBCXX_USE_CXX11_ABI |  cut -d ' ' -f2,3"
+    cxx11_abi = subprocess.getoutput(shcmd)
+    return cxx11_abi == "_GLIBCXX_USE_CXX11_ABI 1"
 
 
 def get_extension_modules():
@@ -212,7 +219,7 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
-            if not os.environ.get('CONDA_BUILD') and is_cxx11_abi():
+            if not os.environ.get("CONDA_BUILD") and is_cxx11_abi():
                 extra_compile_args.append("-D_GLIBCXX_USE_CXX11_ABI=0")
 
         arrow_libs = pyarrow.get_libraries()
