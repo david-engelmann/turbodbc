@@ -129,7 +129,7 @@ else:
 def _get_cxx_compiler():
     cc = distutils.ccompiler.new_compiler()
     distutils.sysconfig.customize_compiler(cc)
-    return cc.compiler_cxx[0]
+    return cc.compiler_cxx[0]  # type: ignore
 
 
 def is_cxx11_abi():
