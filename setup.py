@@ -1,5 +1,5 @@
-import distutils.sysconfig
 import distutils.ccompiler
+import distutils.sysconfig
 import itertools
 import os
 import os.path
