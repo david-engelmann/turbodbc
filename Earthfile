@@ -86,7 +86,7 @@ build:
     ENV TURBODBC_TEST_CONFIGURATION_FILES="query_fixtures_postgresql.json,query_fixtures_mssql.json,query_fixtures_mysql.json"
     RUN ln -s /opt/pybind11-2.9.1 /src/pybind11
 
-    RUN bash -ic " \
+    RUN bash -iec " \
         cmake -DBOOST_ROOT=\${CONDA_PREFIX} -DBUILD_COVERAGE=ON \
             -DCMAKE_INSTALL_PREFIX=./dist  \
             -DPYTHON_EXECUTABLE=\$(which python) \
