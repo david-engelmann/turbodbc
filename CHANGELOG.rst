@@ -7,6 +7,7 @@ Version 4.5.7
 -------------
 
 * Set ``_LIBCPP_DISABLE_AVAILABILITY`` to allow building with C++17 on macOS.
+* Replace usage of ``boost::locale`` with their C++17 equivalents.
 
 Version 4.5.6
 -------------
