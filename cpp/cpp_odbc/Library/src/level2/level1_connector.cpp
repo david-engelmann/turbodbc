@@ -14,10 +14,11 @@
 #endif
 #include "sqlext.h"
 
-#include <sstream>
-#include <iostream>
 #include <ciso646>
 #include <codecvt>
+#include <iostream>
+#include <locale>
+#include <sstream>
 
 namespace impl {
 
