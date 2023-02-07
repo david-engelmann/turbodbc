@@ -91,6 +91,7 @@ jobs:
             pytest-emoji
       - name: Build with CMake
         run: |
+          micromamba activate turbodbc
           mkdir build
           cd build
           cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -GNinja ..
