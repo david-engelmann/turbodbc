@@ -97,6 +97,7 @@ jobs:
           mkdir build
           cd build
           cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -GNinja ..
+          ninja cpp_odbc
           ninja
           cmake --build . --target install
       - name: Install repository

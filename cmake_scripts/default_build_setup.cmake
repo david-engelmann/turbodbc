@@ -15,7 +15,7 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # The language standard we use
 if (MSVC)
-  add_definitions("/std=c++17")
+  add_definitions("/std:c++17")
 else()
   add_definitions("-std=c++17")
 endif()
