@@ -92,7 +92,7 @@ jobs:
       - name: Build with CMake
         run: |
           @echo on
-          micromamba activate turbodbc
+          CALL micromamba activate turbodbc
           @echo on
           mkdir build
           cd build
