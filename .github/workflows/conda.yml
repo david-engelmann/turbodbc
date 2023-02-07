@@ -87,14 +87,12 @@ jobs:
             pytest-md
             pytest-emoji
       - name: Build with CMake
+        shell: cmd /C CALL {0}
         run: |
-          mkdir build && \
-          cd build && \
-          export && \
-          cmake -DBUILD_COVERAGE=ON \
-            -DCMAKE_INSTALL_PREFIX=./dist  \
-            -GNinja .. && \
-          ninja && \
+          mkdir build
+          cd build
+          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -GNinja ..
+          ninja
           cmake --build . --target install
       - name: Install repository
         run: |
