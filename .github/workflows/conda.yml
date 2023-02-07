@@ -90,6 +90,7 @@ jobs:
             pytest-md
             pytest-emoji
       - name: Build with CMake
+        shell: pwsh
         run: |
           mkdir build
           cd build
