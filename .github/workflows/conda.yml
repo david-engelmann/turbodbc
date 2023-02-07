@@ -91,6 +91,7 @@ jobs:
             pytest-emoji
       - name: Build with CMake
         run: |
+          @echo on
           micromamba activate turbodbc
           mkdir build
           cd build
