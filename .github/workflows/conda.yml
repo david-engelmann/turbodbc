@@ -93,7 +93,6 @@ jobs:
           export && \
           cmake -DBUILD_COVERAGE=ON \
             -DCMAKE_INSTALL_PREFIX=./dist  \
-            -DPYTHON_EXECUTABLE=$(which python) \
             -GNinja .. && \
           ninja && \
           cmake --build . --target install
