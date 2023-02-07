@@ -93,6 +93,7 @@ jobs:
         run: |
           @echo on
           micromamba activate turbodbc
+          @echo on
           mkdir build
           cd build
           cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -GNinja ..
