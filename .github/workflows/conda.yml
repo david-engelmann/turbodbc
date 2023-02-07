@@ -96,7 +96,7 @@ jobs:
           @echo on
           mkdir build
           cd build
-          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -G"Unix Makefiles" ..
+          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist ..
           cmake --build .
           cmake --build . --target install
       - name: Install repository
