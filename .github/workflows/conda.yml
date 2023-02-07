@@ -96,7 +96,7 @@ jobs:
           @echo on
           mkdir build
           cd build
-          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist ..
+          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -DWINDOWS_EXPORT_ALL_SYMBOLS=ON -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON ..
           cmake --build .
           cmake --build . --target install
       - name: Install repository
