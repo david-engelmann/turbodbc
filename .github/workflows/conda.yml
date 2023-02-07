@@ -91,7 +91,7 @@ jobs:
           mkdir build && \
           cd build && \
           export && \
-          cmake -DBoost_DEBUG=1 -DBUILD_COVERAGE=ON \
+          cmake -DBoost_DEBUG=1 -DBUILD_COVERAGE=ON -DBoost_USE_STATIC_LIBS=OFF \
             -DCMAKE_INSTALL_PREFIX=./dist  \
             -DPYTHON_EXECUTABLE=$(which python) \
             -GNinja .. && \
