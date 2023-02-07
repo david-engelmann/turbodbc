@@ -61,6 +61,9 @@ jobs:
 #          cd / && python -c 'import turbodbc'
   windows-tests:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd /C call {0}
     strategy:
       fail-fast: false
       matrix:
@@ -87,7 +90,6 @@ jobs:
             pytest-md
             pytest-emoji
       - name: Build with CMake
-        shell: cmd /C CALL {0}
         run: |
           mkdir build
           cd build
