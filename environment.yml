@@ -9,7 +9,7 @@ dependencies:
   - cxx-compiler
   - gmock=1.10.0
   - gtest
-  - boost
+  - boost-cpp
   - cmake
   - ninja
   - pytest
