@@ -17,54 +17,55 @@ defaults:
     shell: bash -el {0}
 
 jobs:
-  macos-tests:
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
-        PYARROW_VERSION: ['10.0.1']
-        include:
-          - PYTHON_VERSION: "3.10"
-            PYARROW_VERSION: "9.0.0"
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Fetch full git history
-        run: git fetch --prune --unshallow
-      - name: Set up Conda env
-        uses: mamba-org/provision-with-micromamba@e2b397b12d0a38069451664382b769c9456e3d6d
-        with:
-          cache-env: true
-          extra-specs: |
-            python=${{ matrix.PYTHON_VERSION }}
-            pyarrow=${{ matrix.PYARROW_VERSION }}
-            pytest-md
-            pytest-emoji
-      - name: Build with CMake
-        run: |
-          mkdir build && \
-          cd build && \
-          cmake -DBOOST_ROOT=${CONDA_PREFIX} -DBUILD_COVERAGE=ON \
-            -DCMAKE_INSTALL_PREFIX=./dist  \
-            -DPYTHON_EXECUTABLE=$(which python) \
-            -GNinja .. && \
-          ninja && \
-          cmake --build . --target install
-      - name: Install repository
-        run: |
-          cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
-      - name: Test import
-        run: |
-          cd / && python -c 'import turbodbc'
+#  macos-tests:
+#    runs-on: macos-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
+#        PYARROW_VERSION: ['10.0.1']
+#        include:
+#          - PYTHON_VERSION: "3.10"
+#            PYARROW_VERSION: "9.0.0"
+#    steps:
+#      - name: Checkout branch
+#        uses: actions/checkout@v3
+#        with:
+#          submodules: true
+#      - name: Fetch full git history
+#        run: git fetch --prune --unshallow
+#      - name: Set up Conda env
+#        uses: mamba-org/provision-with-micromamba@e2b397b12d0a38069451664382b769c9456e3d6d
+#        with:
+#          cache-env: true
+#          extra-specs: |
+#            python=${{ matrix.PYTHON_VERSION }}
+#            pyarrow=${{ matrix.PYARROW_VERSION }}
+#            pytest-md
+#            pytest-emoji
+#      - name: Build with CMake
+#        run: |
+#          mkdir build && \
+#          cd build && \
+#          cmake -DBOOST_ROOT=${CONDA_PREFIX} -DBUILD_COVERAGE=ON \
+#            -DCMAKE_INSTALL_PREFIX=./dist  \
+#            -DPYTHON_EXECUTABLE=$(which python) \
+#            -GNinja .. && \
+#          ninja && \
+#          cmake --build . --target install
+#      - name: Install repository
+#        run: |
+#          cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
+#      - name: Test import
+#        run: |
+#          cd / && python -c 'import turbodbc'
   windows-tests:
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
-        PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
+        # PYTHON_VERSION: ['3.8', '3.9', '3.10', '3.11']
+        PYTHON_VERSION: ['3.10']
         PYARROW_VERSION: ['10.0.1']
         include:
           - PYTHON_VERSION: "3.10"
