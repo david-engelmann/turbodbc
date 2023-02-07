@@ -14,7 +14,11 @@ endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # The language standard we use
-add_definitions("-std=c++17")
+if (MSVC)
+  add_definitions("/std=c++17")
+else()
+  add_definitions("-std=c++17")
+endif()
 
 # build shared instead of static libraries
 set(BUILD_SHARED_LIBS TRUE)
