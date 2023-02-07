@@ -90,7 +90,7 @@ jobs:
           mkdir build && \
           cd build && \
           export && \
-          cmake -DBoost_DEBUG=1 -DBUILD_COVERAGE=ON -DBOOST_ROOT=${CONDA_PREFIX}/Library \
+          cmake -DBoost_DEBUG=1 -DBUILD_COVERAGE=ON \
             -DCMAKE_INSTALL_PREFIX=./dist  \
             -DPYTHON_EXECUTABLE=$(which python) \
             -GNinja .. && \
