@@ -95,7 +95,7 @@ jobs:
           @echo on
           mkdir build
           cd build
-          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -DWINDOWS_EXPORT_ALL_SYMBOLS=ON -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON -DCMAKE_BUILD_TYPE=Release -GNinja ..
+          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -DCMAKE_BUILD_TYPE=Release -GNinja ..
           if %errorlevel% neq 0 exit /b %errorlevel%
           cmake --build .
           if %errorlevel% neq 0 exit /b %errorlevel%
