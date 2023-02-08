@@ -91,14 +91,16 @@ jobs:
             pytest-emoji
       - name: Build with CMake
         run: |
-          @echo on
-          CALL micromamba activate turbodbc
+          @CALL micromamba activate turbodbc
           @echo on
           mkdir build
           cd build
-          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -DWINDOWS_EXPORT_ALL_SYMBOLS=ON -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON ..
+          cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -DWINDOWS_EXPORT_ALL_SYMBOLS=ON -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON -DCMAKE_BUILD_TYPE=Release ..
+          if %errorlevel% neq 0 exit /b %errorlevel%
           cmake --build .
+          if %errorlevel% neq 0 exit /b %errorlevel%
           cmake --build . --target install
+          if %errorlevel% neq 0 exit /b %errorlevel%
       - name: Install repository
         run: |
           cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
