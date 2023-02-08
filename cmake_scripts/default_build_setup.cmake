@@ -72,6 +72,7 @@ add_custom_target(refresh_cmake_configuration
 
 if(WIN32)
 #    link_directories("$ENV{PYTHON}/libs")
+    set(gtest_force_shared_crt ON)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
 #    set(Boost_USE_STATIC_RUNTIME "ON")
 #    set(Boost_USE_STATIC_LIBS "ON")

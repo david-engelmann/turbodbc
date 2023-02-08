@@ -89,7 +89,7 @@ jobs:
             pyarrow=${{ matrix.PYARROW_VERSION }}
             pytest-md
             pytest-emoji
-      - name: Build with CMake
+      - name: Configure with CMake
         run: |
           @CALL micromamba activate turbodbc
           @echo on
@@ -97,6 +97,11 @@ jobs:
           cd build
           cmake -DBUILD_COVERAGE=ON -DCMAKE_INSTALL_PREFIX=./dist -DCMAKE_BUILD_TYPE=Release -GNinja ..
           if %errorlevel% neq 0 exit /b %errorlevel%
+      - name: Build with CMake
+        run: |
+          @CALL micromamba activate turbodbc
+          @echo on
+          cd build
           cmake --build .
           if %errorlevel% neq 0 exit /b %errorlevel%
           cmake --build . --target install
