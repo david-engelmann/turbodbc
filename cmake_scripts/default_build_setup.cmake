@@ -20,12 +20,7 @@ else()
   add_definitions("-std=c++17")
 endif()
 
-# build shared instead of static libraries
-if (MSVC)
-  set(BUILD_SHARED_LIBS FALSE)
-else()
-  set(BUILD_SHARED_LIBS TRUE)
-endif()
+set(BUILD_SHARED_LIBS TRUE)
 
 option(BUILD_COVERAGE
        "Determines whether C++ files will be built with support for coverage measurement"
@@ -75,9 +70,9 @@ add_custom_target(refresh_cmake_configuration
 	COMMENT "Forcing refreshing of the CMake configuration. This allows to use globbing safely."
 )
 
-#if(WIN32)
+if(WIN32)
 #    link_directories("$ENV{PYTHON}/libs")
-#    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
 #    set(Boost_USE_STATIC_RUNTIME "ON")
 #    set(Boost_USE_STATIC_LIBS "ON")
-#endif()
+endif()
