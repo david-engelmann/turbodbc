@@ -21,7 +21,11 @@ else()
 endif()
 
 # build shared instead of static libraries
-set(BUILD_SHARED_LIBS TRUE)
+if (MSVC)
+  set(BUILD_SHARED_LIBS FALSE)
+else()
+  set(BUILD_SHARED_LIBS TRUE)
+endif()
 
 option(BUILD_COVERAGE
        "Determines whether C++ files will be built with support for coverage measurement"
