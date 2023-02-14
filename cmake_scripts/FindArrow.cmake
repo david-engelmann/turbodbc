@@ -89,13 +89,14 @@ if (NOT ARROW_HOME)
     message(STATUS "Found candidate Arrow location: ${ARROW_SEARCH_LIB_PATH}")
   endif()
 else()
-  set(ARROW_SEARCH_HEADER_PATHS
-    ${ARROW_HOME}/include
-    )
-
-  set(ARROW_SEARCH_LIB_PATH
-    ${ARROW_HOME}/lib
-    )
+  message(STATUS "Using ARROW_HOME set to ${ARROW_HOME} to look for Arrow libraries")
+  if (MSVC)
+    set(ARROW_SEARCH_HEADER_PATHS ${ARROW_HOME}/Library/include)
+    set(ARROW_SEARCH_LIB_PATH ${ARROW_HOME}/Library/lib)
+  else()
+    set(ARROW_SEARCH_HEADER_PATHS ${ARROW_HOME}/include)
+    set(ARROW_SEARCH_LIB_PATH ${ARROW_HOME}/lib)
+  endif()
 
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
