@@ -47,8 +47,6 @@ if (UNIX)
     endif()
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /EHsc -DNOMINMAX")
-    set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-    set(CMAKE_CXX_FLAGS_RELEASE "/MT")
 endif()
 
 if (APPLE)
