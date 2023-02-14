@@ -102,13 +102,18 @@ jobs:
           @CALL micromamba activate turbodbc
           @echo on
           cd build
-          ninja -v -j1
+          ninja
           if %errorlevel% neq 0 exit /b %errorlevel%
           cmake --build . --target install
           if %errorlevel% neq 0 exit /b %errorlevel%
       - name: Install repository
         run: |
-          cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
+          @CALL micromamba activate turbodbc
+          @echo on
+          cd build/dist
+          if %errorlevel% neq 0 exit /b %errorlevel%
+          python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
+          if %errorlevel% neq 0 exit /b %errorlevel%
       - name: Test import
         run: |
           cd / && python -c 'import turbodbc'
