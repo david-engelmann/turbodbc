@@ -102,7 +102,7 @@ jobs:
           @CALL micromamba activate turbodbc
           @echo on
           cd build
-          cmake --build .
+          ninja -v -j1
           if %errorlevel% neq 0 exit /b %errorlevel%
           cmake --build . --target install
           if %errorlevel% neq 0 exit /b %errorlevel%
