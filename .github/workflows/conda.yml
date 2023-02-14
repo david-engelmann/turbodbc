@@ -111,6 +111,8 @@ jobs:
           @CALL micromamba activate turbodbc
           @echo on
           cd build/dist
+          dir src
+          dir src\turbodbc_arrow
           if %errorlevel% neq 0 exit /b %errorlevel%
           python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
           if %errorlevel% neq 0 exit /b %errorlevel%
