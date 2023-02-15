@@ -13,10 +13,6 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-# The language standard we use
-add_definitions("-std=c++17")
-
-# build shared instead of static libraries
 set(BUILD_SHARED_LIBS TRUE)
 
 option(BUILD_COVERAGE
@@ -27,25 +23,27 @@ option(DISABLE_CXX11_ABI
        OFF)
 
 if (UNIX)
-    # flags apply for both Linux and OSX!
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-    if (DISABLE_CXX11_ABI)
-        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
-    endif()
-    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -pedantic")
-    set(CMAKE_CXX_FLAGS_RELEASE "-O3 -pedantic")
+  # flags apply for both Linux and OSX!
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+  if (DISABLE_CXX11_ABI)
+      set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
+  endif()
+  set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -pedantic")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -pedantic")
 
-    if (BUILD_COVERAGE)
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
-        set(CMAKE_EXE_LINKER_FLAGS_DEBUG "--coverage")
-        set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "--coverage")
-        set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "--coverage")
-        set(CMAKE_STATIC_LINKER_FLAGS_DEBUG "--coverage")
-    endif()
+  if (BUILD_COVERAGE)
+      set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+      set(CMAKE_EXE_LINKER_FLAGS_DEBUG "--coverage")
+      set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "--coverage")
+      set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "--coverage")
+      set(CMAKE_STATIC_LINKER_FLAGS_DEBUG "--coverage")
+  endif()
+  add_definitions("-std=c++17")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /EHsc -DNOMINMAX")
-    set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-    set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+  set(gtest_force_shared_crt ON)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
+  add_definitions("/std:c++17")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /EHsc -DNOMINMAX")
 endif()
 
 if (APPLE)
@@ -66,10 +64,3 @@ add_custom_target(refresh_cmake_configuration
 	cmake -E touch ${CMAKE_PARENT_LIST_FILE} # make cmake detect configuration is changed on NEXT build
 	COMMENT "Forcing refreshing of the CMake configuration. This allows to use globbing safely."
 )
-
-if(WIN32)
-    link_directories("$ENV{PYTHON}/libs")
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
-    set(Boost_USE_STATIC_RUNTIME "ON")
-    set(Boost_USE_STATIC_LIBS "ON")
-endif()

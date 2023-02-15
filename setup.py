@@ -101,6 +101,7 @@ if sys.platform == "darwin":
     odbclib = "odbc"
 elif sys.platform == "win32":
     extra_compile_args.append("-DNOMINMAX")
+    extra_compile_args.append("/std:c++17")
     if "BOOST_ROOT" in os.environ:
         include_dirs.append(os.getenv("BOOST_ROOT"))
         library_dirs.append(os.path.join(os.getenv("BOOST_ROOT"), "stage", "lib"))
@@ -108,6 +109,10 @@ elif sys.platform == "win32":
     else:
         print("warning: BOOST_ROOT enviroment variable not set")
     odbclib = "odbc32"
+    if "CONDA_PREFIX" in os.environ:
+        include_dirs.append(
+            os.path.join(os.environ["CONDA_PREFIX"], "Library", "include")
+        )
 else:
     extra_compile_args.append("--std=c++17")
     hidden_visibility_args.append("-fvisibility=hidden")

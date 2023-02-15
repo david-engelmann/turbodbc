@@ -89,13 +89,14 @@ if (NOT ARROW_HOME)
     message(STATUS "Found candidate Arrow location: ${ARROW_SEARCH_LIB_PATH}")
   endif()
 else()
-  set(ARROW_SEARCH_HEADER_PATHS
-    ${ARROW_HOME}/include
-    )
-
-  set(ARROW_SEARCH_LIB_PATH
-    ${ARROW_HOME}/lib
-    )
+  message(STATUS "Using ARROW_HOME set to ${ARROW_HOME} to look for Arrow libraries")
+  if (MSVC)
+    set(ARROW_SEARCH_HEADER_PATHS ${ARROW_HOME}/Library/include)
+    set(ARROW_SEARCH_LIB_PATH ${ARROW_HOME}/Library/lib)
+  else()
+    set(ARROW_SEARCH_HEADER_PATHS ${ARROW_HOME}/include)
+    set(ARROW_SEARCH_LIB_PATH ${ARROW_HOME}/lib)
+  endif()
 
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import pyarrow as pa; print(pa.get_include());"
                 RESULT_VARIABLE _PYARROW_SEARCH_SUCCESS
@@ -121,12 +122,27 @@ find_library(ARROW_LIB_PATH NAMES arrow
 message(STATUS "Found ${ARROW_LIB_PATH} in ${ARROW_SEARCH_LIB_PATH}")
 get_filename_component(ARROW_LIBS ${ARROW_LIB_PATH} DIRECTORY)
 
+if (MSVC AND ARROW_HOME)
+  set(ARROW_SEARCH_LIB_PATH_EXT ${ARROW_HOME}/lib/site-packages/pyarrow)
+endif()
+
 find_library(ARROW_PYTHON_LIB_PATH NAMES arrow_python
     PATHS
+    ${ARROW_SEARCH_LIB_PATH_EXT}
     ${ARROW_SEARCH_LIB_PATH}/*/site-packages/pyarrow
     ${ARROW_SEARCH_LIB_PATH}
-  DOC "Path to the libarrow_python headers"
+  DOC "Path to libarrow_python shared object"
   NO_DEFAULT_PATH)
+
+if (MSVC)
+  find_library(ARROW_PYTHON_IMP_LIB_PATH NAMES arrow_python.lib
+      PATHS
+      ${ARROW_SEARCH_LIB_PATH_EXT}
+      ${ARROW_SEARCH_LIB_PATH}/*/site-packages/pyarrow
+      ${ARROW_SEARCH_LIB_PATH}
+    DOC "Path to the arrow_python.lib implementation lib"
+    NO_DEFAULT_PATH)
+endif()
 
 if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
   set(ARROW_FOUND TRUE)
@@ -136,9 +152,9 @@ if (ARROW_INCLUDE_DIR AND ARROW_LIBS)
 
   if (MSVC)
     set(ARROW_SHARED_LIB ${ARROW_LIBS}/${ARROW_LIB_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
-    set(ARROW_PYTHON_SHARED_LIB ${ARROW_LIBS}/${ARROW_PYTHON_LIB_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(ARROW_PYTHON_SHARED_LIB ${ARROW_PYTHON_IMP_LIB_PATH})
     set(ARROW_SHARED_IMP_LIB ${ARROW_LIBS}/${ARROW_LIB_NAME}.lib)
-    set(ARROW_PYTHON_SHARED_IMP_LIB ${ARROW_LIBS}/${ARROW_PYTHON_LIB_NAME}.lib)
+    set(ARROW_PYTHON_SHARED_IMP_LIB ${ARROW_PYTHON_IMP_LIB_PATH})
   else()
     set(ARROW_SHARED_LIB ${ARROW_LIBS}/libarrow${CMAKE_SHARED_LIBRARY_SUFFIX})
     set(ARROW_PYTHON_SHARED_LIB ${ARROW_PYTHON_LIB_PATH})
