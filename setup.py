@@ -198,7 +198,6 @@ def get_extension_modules():
         pyarrow_include_dir = pyarrow.get_include()
 
         turbodbc_arrow_sources = _get_source_files("turbodbc_arrow")
-        print(f"{turbodbc_arrow_sources=}")
         pyarrow_module_link_args = list(python_module_link_args)
         if sys.platform == "win32":
             turbodbc_arrow_sources = turbodbc_sources + turbodbc_arrow_sources
