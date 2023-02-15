@@ -29,7 +29,7 @@ def _has_numpy_support() -> bool:
 
 def _has_arrow_support() -> bool:
     try:
-        import turbodbc_arrow_support  # noqa: F401
+        import turbodbc.arrow_support  # noqa: F401
 
         return True
     except ImportError:
@@ -209,7 +209,7 @@ class Cursor:
                 return c.num_chunks
 
             if isinstance(columns, pa.Table):
-                from turbodbc_arrow_support import set_arrow_parameters
+                from turbodbc.arrow_support import set_arrow_parameters
 
                 for column in columns.itercolumns():
                     if _num_chunks(column) != 1:
@@ -352,7 +352,7 @@ class Cursor:
         """
         self._assert_valid_result_set()
         if _has_arrow_support():
-            from turbodbc_arrow_support import make_arrow_result_set
+            from turbodbc.arrow_support import make_arrow_result_set
 
             rs = make_arrow_result_set(
                 self.impl.get_result_set(), strings_as_dictionary, adaptive_integers
@@ -386,7 +386,7 @@ class Cursor:
         """
         self._assert_valid_result_set()
         if _has_arrow_support():
-            from turbodbc_arrow_support import make_arrow_result_set
+            from turbodbc.arrow_support import make_arrow_result_set
 
             return make_arrow_result_set(
                 self.impl.get_result_set(), strings_as_dictionary, adaptive_integers

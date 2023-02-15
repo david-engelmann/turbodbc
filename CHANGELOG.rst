@@ -3,6 +3,12 @@ Version history / changelog
 
 From version 2.0.0, turbodbc adapts semantic versioning.
 
+Version 4.5.8
+-------------
+
+* Ensure we can correctly load ``arrow_python.dll`` on Windows.
+* Various build system fixes as we now have macOS and Windows CI.
+
 Version 4.5.7
 -------------
 
