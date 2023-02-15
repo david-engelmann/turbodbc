@@ -118,4 +118,9 @@ jobs:
           if %errorlevel% neq 0 exit /b %errorlevel%
       - name: Test import
         run: |
-          cd / && python -c 'import turbodbc'
+          @CALL micromamba activate turbodbc
+          @echo on
+          cd /
+          if %errorlevel% neq 0 exit /b %errorlevel%
+          python -c "import turbodbc"
+          if %errorlevel% neq 0 exit /b %errorlevel%
