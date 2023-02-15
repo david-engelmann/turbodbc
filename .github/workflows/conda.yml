@@ -58,7 +58,9 @@ jobs:
           cd build/dist && python -m pip install --no-build-isolation --no-deps --disable-pip-version-check -e .
       - name: Test import
         run: |
-          cd / && python -c 'import turbodbc'
+          cd /
+          python -c 'import turbodbc'
+          python -c "import turbodbc.arrow_support"
   windows-tests:
     runs-on: windows-latest
     defaults:
@@ -124,4 +126,6 @@ jobs:
           cd /
           if %errorlevel% neq 0 exit /b %errorlevel%
           python -c "import turbodbc"
+          if %errorlevel% neq 0 exit /b %errorlevel%
+          python -c "import turbodbc.arrow_support"
           if %errorlevel% neq 0 exit /b %errorlevel%
