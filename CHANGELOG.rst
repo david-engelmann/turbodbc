@@ -3,15 +3,11 @@ Version history / changelog
 
 From version 2.0.0, turbodbc adapts semantic versioning.
 
-Version 4.5.8
+Version 4.5.7
 -------------
 
 * Ensure we can correctly load ``arrow_python.dll`` on Windows.
 * Various build system fixes as we now have macOS and Windows CI.
-
-Version 4.5.7
--------------
-
 * Set ``_LIBCPP_DISABLE_AVAILABILITY`` to allow building with C++17 on macOS.
 * Replace usage of ``boost::locale`` with their C++17 equivalents.
 
