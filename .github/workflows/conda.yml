@@ -39,6 +39,7 @@ jobs:
       - name: Set up Conda env
         uses: mamba-org/provision-with-micromamba@e2b397b12d0a38069451664382b769c9456e3d6d
         with:
+          condarc-file: .github/workflows/.condarc
           cache-env: true
           extra-specs: |
             python=${{ matrix.PYTHON_VERSION }}
@@ -90,6 +91,7 @@ jobs:
       - name: Set up Conda env
         uses: mamba-org/provision-with-micromamba@e2b397b12d0a38069451664382b769c9456e3d6d
         with:
+          condarc-file: .github/workflows/.condarc
           cache-env: true
           extra-specs: |
             python=${{ matrix.PYTHON_VERSION }}
