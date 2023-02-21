@@ -3,7 +3,6 @@ import distutils.sysconfig
 import itertools
 import os
 import os.path
-import subprocess
 import sys
 from glob import iglob
 from typing import List
@@ -133,9 +132,18 @@ def _get_cxx_compiler():
 
 
 def is_cxx11_abi():
-    shcmd = f"echo '#include <string>' | {_get_cxx_compiler()} -x c++ -E -dM - | fgrep _GLIBCXX_USE_CXX11_ABI |  cut -d ' ' -f2,3"
-    cxx11_abi = subprocess.getoutput(shcmd)
-    return cxx11_abi == "_GLIBCXX_USE_CXX11_ABI 1"
+    import pathlib
+
+    import pyarrow.lib
+
+    binary_so = pathlib.Path(pyarrow.lib.__file__).read_bytes()
+
+    # Check for an old CXXABI symbol in the main library. This one is quite stable across all Arrow releases.
+    # arrow::Status::ToString() -> std::string
+    if b"_ZNK5arrow6Status8ToStringEv" in binary_so:
+        return False
+    # Here we can add other symbols to check for if future releases would come with a different API.
+    return True
 
 
 def get_extension_modules():
@@ -219,7 +227,7 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
-            if not os.environ.get("CONDA_BUILD") and is_cxx11_abi():
+            if not is_cxx11_abi():
                 extra_compile_args.append("-D_GLIBCXX_USE_CXX11_ABI=0")
 
         arrow_libs = pyarrow.get_libraries()
