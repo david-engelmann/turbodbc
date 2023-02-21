@@ -1,3 +1,4 @@
+import distutils.ccompiler
 import distutils.sysconfig
 import itertools
 import os
@@ -124,6 +125,27 @@ else:
     odbclib = "odbc"
 
 
+def _get_cxx_compiler():
+    cc = distutils.ccompiler.new_compiler()
+    distutils.sysconfig.customize_compiler(cc)
+    return cc.compiler_cxx[0]  # type: ignore
+
+
+def is_cxx11_abi():
+    import pathlib
+
+    import pyarrow.lib
+
+    binary_so = pathlib.Path(pyarrow.lib.__file__).read_bytes()
+
+    # Check for an old CXXABI symbol in the main library. This one is quite stable across all Arrow releases.
+    # arrow::Status::ToString() -> std::string
+    if b"_ZNK5arrow6Status8ToStringEv" in binary_so:
+        return False
+    # Here we can add other symbols to check for if future releases would come with a different API.
+    return True
+
+
 def get_extension_modules():
     extension_modules = []
 
@@ -205,6 +227,8 @@ def get_extension_modules():
             pyarrow_module_link_args.append("-Wl,-rpath,@loader_path/pyarrow")
         else:
             pyarrow_module_link_args.append("-Wl,-rpath,$ORIGIN/pyarrow")
+            if not is_cxx11_abi():
+                extra_compile_args.append("-D_GLIBCXX_USE_CXX11_ABI=0")
 
         arrow_libs = pyarrow.get_libraries()
 
@@ -230,7 +254,7 @@ with open(os.path.join(here, "README.md")) as f:
 
 setup(
     name="turbodbc",
-    version="4.5.8",
+    version="4.5.9",
     description="turbodbc is a Python DB API 2.0 compatible ODBC driver",
     long_description=long_description,
     long_description_content_type="text/markdown",

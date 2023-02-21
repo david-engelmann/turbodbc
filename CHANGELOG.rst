@@ -3,6 +3,11 @@ Version history / changelog
 
 From version 2.0.0, turbodbc adapts semantic versioning.
 
+Version 4.5.9
+-------------
+
+* Check for ``_GLIBCXX_USE_CXX11_ABI`` setting of ``pyarrow``.
+
 Version 4.5.8
 -------------
 
