@@ -19,11 +19,11 @@ def test_nextset_with_one_result_set(dsn, configuration):
         assert False, f"Didn't find a call for nextset\n{exc}\n"
     else:
         assert True, "Found call for nextset"
-        
+
 @for_one_database
 def test_next_set_with_many_column_names(dsn, configuration):
     cursor = connect(dsn, **get_credentials(configuration)).cursor()
-    cursor.execute("SELECT 42 as Column1;Select 42 as Column2;Select 42 as Column3;Select 42 as Column4")
+    cursor.execute("SELECT 1 as Column1;Select 2 as Column2;Select 3 as Column3;Select 4 as Column4;")
     result_one = cursor.fetchallnumpy()
     print(result_one)
     cursor.nextset()
